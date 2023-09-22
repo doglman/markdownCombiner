@@ -33,15 +33,6 @@ def repairLinks(filePath: str) -> None:
     Processes the file indicated by `filePath`, replacing internal links of the format `[[nameOfFile#subheading]]` to links of format `[[#subheading]]`
     - Used for repairing the internal file-to-file links so the links in the combined file still work.
     """
-
-    """
-    I'm thinking the Regex will looks something like:
-    \[\[([^#|\]]+)([^\]]*)\]\]
-    with the replacement phrase being:
-    [[newPage#$1$2]]
-    So 2 groups: [[group1#group2|group2]] to correspond to the document and heading/display text. 
-    The heading/display text is copied into a new link, with the name of the new page placed as the document reference.
-    """
     with open(filePath, "r") as inFile:
         try:
             while True:
