@@ -56,9 +56,9 @@ def extractLinkSubgroups(match_obj: re.Match)-> str:
     groups = match_obj.groups()
     
     if groups[1] != '': #i.e. there's a subheading
-        return "[[{}{}]]".format(groups[1],groups[2])
+        return " [[{}{}]]".format(groups[1],groups[2])
     else:
-        return "[[#{}{}]]".format(groups[0], groups[2])
+        return " [[#{}{}]]".format(groups[0], groups[2])
 
 if __name__ == "__main__":
     combineFiles("./testKb", "test_out")
