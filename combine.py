@@ -34,6 +34,7 @@ def repairLinks(filePath: str) -> None:
     - Used for repairing the internal file-to-file links so the links in the combined file still work.
     """
     # Read the provided file into a list of strings
+    # https://stackoverflow.com/a/4719562
     with open(filePath, "r") as inFile:
         lineList = inFile.readlines()
 
@@ -41,6 +42,7 @@ def repairLinks(filePath: str) -> None:
     newLineList = []
 
     for line in lineList:
+        # https://pynative.com/python-regex-replace-re-sub/
         new_line = re.sub(r"[^!`]\[\[([^#|\]]+)([^|\]]*)([^\]]*)\]\]", extractLinkSubgroups, line)
         if new_line != line:
             print("Next line:|| {} ||".format(line))
