@@ -33,17 +33,26 @@ def repairLinks(filePath: str) -> None:
     Processes the file indicated by `filePath`, replacing internal links of the format `[[nameOfFile#subheading]]` to links of format `[[#subheading]]`
     - Used for repairing the internal file-to-file links so the links in the combined file still work.
     """
+    # Read the provided file into a list of strings
     with open(filePath, "r") as inFile:
-        try:
-            while True:
-                line = next(inFile)
-                new_line = re.sub(r"\[\[([^#|\]]+)([^|\]]*)([^\]]*)\]\]", extractLinkSubgroups, line)
-                if new_line != line:
-                    print("Next line:|| {} ||".format(line))
-                    print("Now is:|| {} ||".format(new_line))
-                #TODO - write line to buffer
-        except StopIteration:
-            print("EOF reached")
+        lineList = inFile.readlines()
+
+    # Go through each line, repairing links as necessary, and appending to a new list
+    newLineList = []
+
+    for line in lineList:
+        new_line = re.sub(r"[^!`]\[\[([^#|\]]+)([^|\]]*)([^\]]*)\]\]", extractLinkSubgroups, line)
+        if new_line != line:
+            print("Next line:|| {} ||".format(line))
+            print("Now is:|| {} ||".format(new_line))
+
+        # Overwrite the old line with the new one
+        newLineList.append(new_line)
+
+    # Save results, overwriting the provided file.    
+    with open(filePath, 'w') as outFile:
+        outFile.writelines(newLineList)
+    
 
 def extractLinkSubgroups(match_obj: re.Match)-> str:
     """
