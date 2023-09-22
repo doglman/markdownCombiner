@@ -42,38 +42,32 @@ def repairLinks(filePath: str) -> None:
     So 2 groups: [[group1#group2|group2]] to correspond to the document and heading/display text. 
     The heading/display text is copied into a new link, with the name of the new page placed as the document reference.
     """
-    #TODO - A replacement function needs to be built for the `re.sub()` function
     with open(filePath, "r") as inFile:
         try:
             while True:
                 line = next(inFile)
-                new_line = re.sub("\[\[([^#|\]]+)([^\]]*)\]\]", repairLink, line)
-                if new_line != "":
+                new_line = re.sub(r"\[\[([^#|\]]+)([^|\]]*)([^\]]*)\]\]", extractLinkSubgroups, line)
+                if new_line != line:
                     print("Next line:|| {} ||".format(line))
                     print("Now is:|| {} ||".format(new_line))
                 #TODO - write line to buffer
         except StopIteration:
             print("EOF reached")
 
-def repairLink(match_obj: re.Match)->str:
+def extractLinkSubgroups(match_obj: re.Match)-> str:
     """
-    Callable for `re.sub()`'s second parameter. Reformats the regex match to be a valid link in the new document.
+    Callable for `re.sub()`'s second parameter. Extracts the correct subgroups for a link depending on if it links to a subheading or not.
     
-    Process:
-    1. Search for any alternate text (past the '|') and extract the contents for later.
-    2. Identify whether the link is to a sub-heading or not (i.e. contains a '#')
-        - If it lacks a subheading, the new link is: [[#page_name]]
-        - If it has a subheading, the new link is: [[#subheading]]
-    3. Assemble the final subheading and return the link.
+    Assumes `match_obj` are matches for the following regular expression: `\[\[([^#|\]]+)([^|\]]*)([^\]]*)\]\]`
+    
+    ...which has 3 sub-groups for the possible link, header, and alt text fields, i.e. [[link#heading|altText]]
     """
-    alt_text = re.search("\|[^\]]+", match_obj) 
-    link_text = None
-    if re.search("#", match_obj) is None:
-        pass # TODO
+    groups = match_obj.groups()
+    
+    if groups[1] != '': #i.e. there's a subheading
+        return "[[{}{}]]".format(groups[1],groups[2])
     else:
-        pass # TODO
-    
-    return "[[#{}{}]]".format(link_text, alt_text)
+        return "[[#{}{}]]".format(groups[0], groups[2])
 
 if __name__ == "__main__":
     combineFiles("./testKb", "test_out")
