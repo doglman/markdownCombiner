@@ -24,9 +24,9 @@ def combineFiles(path: str, outputName: str) -> None:
                 name = f.removeprefix("{}/".format(path))
                 name = name.removesuffix(".md")
                 # print("File title is: {}".format(name))
-                outfile.write("\n# {}\n".format(name))
+                outfile.write("\n# {}\n".format(name)) # Write the files' name as a Level 1 Heading
                 outfile.write(infile.read())
-                outfile.write("\n\n---\n---\n---\n")
+                outfile.write("\n\n---\n---\n---\n") # Write some extra newlines and dividing lines between pages
 
 def repairLinks(filePath: str) -> None:
     """
