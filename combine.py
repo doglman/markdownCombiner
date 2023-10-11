@@ -72,5 +72,7 @@ def extractLinkSubgroups(match_obj: re.Match)-> str:
         return " [[#{}{}]]".format(groups[0], groups[2])
 
 if __name__ == "__main__":
-    combineFiles("./testKb", "test_out")
-    repairLinks("/home/samswin/code/markdownCombiner/test_out.md")
+    md_folder_path = input("Enter the path to the folder containing the .md files:")
+    combineFiles(md_folder_path, "KB_COMBINED")
+    repairLinks("./KB_COMBINED.md")
+    print("\nFile Combining Complete!\n")
